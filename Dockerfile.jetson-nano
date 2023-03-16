@@ -24,3 +24,8 @@ RUN ln -s /usr/bin/llvm-config-10 /usr/bin/llvm-config
 RUN git clone https://github.com/maxbbraun/whisper.git && cd whisper && python -m pip install -e .
 
 RUN apt-get -y install ffmpeg
+
+# TODO: Install and run script doing continuous recording and processing of
+#       audio (use smaller than 30s chunks)
+
+# TODO: Try using beam search instead of greedy decoding only
