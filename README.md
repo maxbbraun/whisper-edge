@@ -4,12 +4,12 @@ Porting [OpenAI Whisper](https://github.com/openai/whisper) speech recognition t
 
 ## Jetson Nano
 
-Instructions for the [NVIDIA Jetson Nano Developer Kit (4G)](https://developer.nvidia.com/embedded/jetson-nano-developer-kit). Additional [active cooling](https://noctua.at/en/nf-a4x10-flx) recommended.
+Instructions for the [NVIDIA Jetson Nano Developer Kit (4GB)](https://developer.nvidia.com/embedded/jetson-nano-developer-kit). Additional [active cooling](https://noctua.at/en/nf-a4x10-flx) recommended.
 
 ### Model
 
 The [`base.en` version](https://github.com/openai/whisper#available-models-and-languages) of Whisper seems to work best for the Jetson Nano:
- - `base` is the largest model size that fits into the 4G of memory without modification.
+ - `base` is the largest model size that fits into the 4GB of memory without modification.
  - Inference performance with `base` is ~10x real-time, which gives some room to process chunks shorter than 30 seconds (and therefore minimize the time from recording to transcription).
  - Using the english-only `.en` version further improves WER ([<5% on LibriSpeech test-clean](https://cdn.openai.com/papers/whisper.pdf)).
 
