@@ -27,18 +27,18 @@ Solution:
 
 First, follow the [Jetson Nano Developer Kit setup instructions](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit). We will use [NVIDIA Docker containers](https://github.com/dusty-nv/jetson-inference) to run inference.
 
-```
+```bash
 ssh user@jetson-nano.local
 git clone --recursive https://github.com/dusty-nv/jetson-inference
 exit
 ```
 
-```
+```bash
 git clone https://github.com/maxbbraun/whisper-edge.git
 scp whisper-edge/Dockerfile.jetson-nano user@jetson-nano.local:~/jetson-inference/Dockerfile
 ```
 
-```
+```bash
 ssh user@jetson-nano.local
 cd jetson-inference
 docker/build.sh dustynv/jetson-inference:r32.7.1
@@ -47,7 +47,7 @@ exit
 
 ### Run
 
-```
+```bash
 ssh user@jetson-nano.local
 cd jetson-inference
 docker/run.sh
