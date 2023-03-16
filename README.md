@@ -25,23 +25,26 @@ Solution:
 
 ### Setup
 
-First, follow the [Jetson Nano Developer Kit setup instructions](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit). We will use [NVIDIA Docker containers](https://github.com/dusty-nv/jetson-inference) to run inference.
+First, follow the [Jetson Nano Developer Kit setup instructions](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit). We will use [NVIDIA Docker containers](https://hub.docker.com/r/dustynv/jetson-inference/tags) to run inference.
 
 ```bash
 ssh user@jetson-nano.local
-git clone --recursive https://github.com/dusty-nv/jetson-inference
+git clone --recursive https://github.com/maxbbraun/jetson-inference
 exit
 ```
 
 ```bash
 git clone https://github.com/maxbbraun/whisper-edge.git
-scp whisper-edge/Dockerfile.jetson-nano user@jetson-nano.local:~/jetson-inference/Dockerfile
+cd whisper-edge
+scp Dockerfile.jetson-nano user@jetson-nano.local:~/jetson-inference/Dockerfile
+scp stream.py user@jetson-nano.local:~/jetson-inference/
 ```
 
 ```bash
 ssh user@jetson-nano.local
 cd jetson-inference
-docker/build.sh dustynv/jetson-inference:r32.7.1
+DOCKER_IMAGE=dustynv/jetson-inference:r32.7.1  # JetPack 4.6.1
+docker/build.sh $DOCKER_IMAGE
 exit
 ```
 
@@ -50,7 +53,7 @@ exit
 ```bash
 ssh user@jetson-nano.local
 cd jetson-inference
-docker/run.sh
+docker/run.sh --run "python stream.py"
 ```
 
 ## Coral Edge TPU
