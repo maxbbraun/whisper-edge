@@ -11,7 +11,7 @@ Porting [OpenAI Whisper](https://github.com/openai/whisper) speech recognition t
 | [NVIDIA Jetson Nano Developer Kit (4G)](https://developer.nvidia.com/embedded/jetson-nano-developer-kit) | [$149.00](https://www.amazon.com/NVIDIA-Jetson-Nano-Developer-945-13450-0000-100/dp/B084DSDDLT/) |
 | [ChanGeek CGS-M1 USB Microphone](https://www.amazon.com/gp/product/B08M37224H/ref=ppx_yo_dt_b_asin_title_o03_s00) | [$16.99](https://www.amazon.com/gp/product/B08M37224H/ref=ppx_yo_dt_b_asin_title_o03_s00) |
 | [Noctua NF-A4x10 FLX Fan](https://noctua.at/en/nf-a4x10-flx) (or similar, recommended) | [$13.95](https://www.amazon.com/gp/product/B009NQLT0M/ref=ppx_yo_dt_b_asin_title_o00_s00) |
-| [D-Link DWA-181](https://www.dlink.com/en/products/dwa-181-ac1300-mu-mimo-wi-fi-nano-usb-adapter) (or similar, optional) | [$21.94](https://www.amazon.com/D-Link-Wireless-Internet-Supported-DWA-181-US/dp/B07YYL3RYJ/) |
+| [D-Link DWA-181 Wi-Fi Adapter](https://www.dlink.com/en/products/dwa-181-ac1300-mu-mimo-wi-fi-nano-usb-adapter) (or similar, optional) | [$21.94](https://www.amazon.com/D-Link-Wireless-Internet-Supported-DWA-181-US/dp/B07YYL3RYJ/) |
 
 ### Model
 
@@ -32,23 +32,28 @@ Workaround:
 
 ### Setup
 
-First, follow the [Jetson Nano Developer Kit setup instructions](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit). We will use [NVIDIA Docker containers](https://hub.docker.com/r/dustynv/jetson-inference/tags) to run inference.
+First, follow the [developer kit setup instructions](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit), connect the Wi-Fi adapter and the microphone to USB, and ideally [install a fan](https://noctua.at/en/nf-a4x10-flx/service). (Also plugging in an Ethernet cable might help to make the downloads faster.)
+
+The USB microphone should show up as an [ALSA](https://www.alsa-project.org) device. Configure it once:
+
+```bash
+apt-get -y install alsa-utils
+arecord -l  # Identify recording device
+alsamixer  # Adjust gain
+arecord --format=S16_LE --duration=5 --rate=16000 --channels=1 --device=plughw:2,0 test.wav
+```
+
+We will use [NVIDIA Docker containers](https://hub.docker.com/r/dustynv/jetson-inference/tags) to run inference. Get the source code and build the modified container:
 
 ```bash
 ssh user@jetson-nano.local
-git clone --recursive https://github.com/maxbbraun/jetson-inference
-exit
-```
 
-```bash
+git clone --recursive https://github.com/maxbbraun/jetson-inference.git
 git clone https://github.com/maxbbraun/whisper-edge.git
-cd whisper-edge
-scp Dockerfile.jetson-nano user@jetson-nano.local:~/jetson-inference/Dockerfile
-scp stream.py user@jetson-nano.local:~/jetson-inference/
-```
 
-```bash
-ssh user@jetson-nano.local
+cp whisper-edge/Dockerfile.jetson-nano jetson-inference/Dockerfile
+cp whisper-edge/stream.py jetson-inference/
+
 cd jetson-inference
 DOCKER_IMAGE=dustynv/jetson-inference:r32.7.1  # JetPack 4.6.1
 docker/build.sh $DOCKER_IMAGE
@@ -57,11 +62,13 @@ exit
 
 ### Run
 
+Launch inference remotely:
+
 ```bash
-ssh user@jetson-nano.local
-cd jetson-inference
-docker/run.sh --run "python stream.py"
+ssh -t user@jetson-nano.local 'cd jetson-inference && docker/run.sh --run "python stream.py"'
 ```
+
+You should see console output similar to this:
 
 ```bash
 I0317 00:42:23.979984 547488051216 stream.py:75] Loading model "base.en"...
