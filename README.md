@@ -10,7 +10,7 @@ Porting [OpenAI Whisper](https://github.com/openai/whisper) speech recognition t
 | :- | -: |
 | [NVIDIA Jetson Nano Developer Kit (4G)](https://developer.nvidia.com/embedded/jetson-nano-developer-kit) | [$149.00](https://www.amazon.com/NVIDIA-Jetson-Nano-Developer-945-13450-0000-100/dp/B084DSDDLT/) |
 | [ChanGeek CGS-M1 USB Microphone](https://www.amazon.com/gp/product/B08M37224H/ref=ppx_yo_dt_b_asin_title_o03_s00) | [$16.99](https://www.amazon.com/gp/product/B08M37224H/ref=ppx_yo_dt_b_asin_title_o03_s00) |
-| [Noctua NF-A4x10 FLX Fan](https://noctua.at/en/nf-a4x10-flx) (or similar, recommended) | [$13.95](https://www.amazon.com/gp/product/B009NQLT0M/ref=ppx_yo_dt_b_asin_title_o00_s00) |
+| [Noctua NF-A4x10 5V Fan](https://noctua.at/en/products/fan/nf-a4x10-5v) (or similar, recommended) | [$13.95](https://www.amazon.com/Noctua-Cooling-Bearing-NF-A4X10-FLX-5V/dp/B00NEMGCIA/) |
 | [D-Link DWA-181 Wi-Fi Adapter](https://www.dlink.com/en/products/dwa-181-ac1300-mu-mimo-wi-fi-nano-usb-adapter) (or similar, optional) | [$21.94](https://www.amazon.com/D-Link-Wireless-Internet-Supported-DWA-181-US/dp/B07YYL3RYJ/) |
 
 ### Model
