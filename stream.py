@@ -44,8 +44,6 @@ def transcribe(model, audio):
     # Run the Whisper model to transcribe the audio chunk.
     result = whisper.transcribe(model=model, audio=audio)
 
-    # TODO: Process overlapping chunks of audio?
-
     # Use the transcribed text.
     text = result['text'].strip()
     logging.info(text)
