@@ -50,15 +50,12 @@ We will use [NVIDIA Docker containers](https://hub.docker.com/r/dustynv/jetson-i
 ```bash
 ssh user@jetson-nano.local
 
-git clone --recursive https://github.com/maxbbraun/jetson-inference.git
-git clone https://github.com/maxbbraun/whisper-edge.git
+git clone --recursive https://github.com/maxbbraun/whisper-edge.git
+cd whisper-edge/jetson-inference
+cp ../Dockerfile.jetson-nano Dockerfile
+cp ../stream.py .
 
-cp whisper-edge/Dockerfile.jetson-nano jetson-inference/Dockerfile
-cp whisper-edge/stream.py jetson-inference/
-
-cd jetson-inference
-DOCKER_IMAGE=dustynv/jetson-inference:r32.7.1  # JetPack 4.6.1
-docker/build.sh $DOCKER_IMAGE
+docker/build.sh dustynv/jetson-inference:r32.7.1  # JetPack 4.6.1
 ```
 
 ### Run
@@ -66,7 +63,7 @@ docker/build.sh $DOCKER_IMAGE
 Launch inference remotely:
 
 ```bash
-ssh -t user@jetson-nano.local 'cd jetson-inference && docker/run.sh --run "python stream.py"'
+ssh -t user@jetson-nano.local 'cd whisper-edge/jetson-inference && docker/run.sh --run "python stream.py"'
 ```
 
 You should see console output similar to this:

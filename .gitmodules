@@ -1,0 +1,3 @@
+[submodule "jetson-inference"]
+	path = jetson-inference
+	url = https://github.com/maxbbraun/jetson-inference.git
