@@ -37,6 +37,8 @@ First, follow the [developer kit setup instructions](https://developer.nvidia.co
 The USB microphone should show up as an [ALSA](https://www.alsa-project.org) device. Configure it once:
 
 ```bash
+ssh user@jetson-nano.local
+
 apt-get -y install alsa-utils
 arecord -l  # Identify recording device
 alsamixer  # Adjust gain
@@ -57,7 +59,6 @@ cp whisper-edge/stream.py jetson-inference/
 cd jetson-inference
 DOCKER_IMAGE=dustynv/jetson-inference:r32.7.1  # JetPack 4.6.1
 docker/build.sh $DOCKER_IMAGE
-exit
 ```
 
 ### Run
