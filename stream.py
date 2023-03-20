@@ -13,7 +13,7 @@ FLAGS = flags.FLAGS
 flags.DEFINE_string('model_name', 'base.en',
                     'The version of the OpenAI Whisper model to use.')
 flags.DEFINE_string('language', 'en',
-                    'The language to use or None to auto-detect.')
+                    'The language to use or empty to auto-detect.')
 flags.DEFINE_string('input_device', 'plughw:2,0',
                     'The input device used to record audio.')
 flags.DEFINE_integer('sample_rate', 16000,
