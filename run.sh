@@ -7,4 +7,5 @@ sudo docker run \
   --network host \
   --device /dev/snd \
   whisper-inference \
-  python stream.py
+  python stream.py \
+  $@
