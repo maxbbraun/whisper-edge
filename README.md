@@ -45,25 +45,37 @@ alsamixer  # Adjust gain
 arecord --format=S16_LE --duration=5 --rate=16000 --channels=1 --device=plughw:2,0 test.wav
 ```
 
-We will use [NVIDIA Docker containers](https://hub.docker.com/r/dustynv/jetson-inference/tags) to run inference. Get the source code and build the modified container:
+We will use [NVIDIA Docker containers](https://hub.docker.com/r/dustynv/jetson-inference/tags) to run inference. Get the source code and build the custom container:
 
 ```bash
 ssh user@jetson-nano.local
 
-git clone --recursive https://github.com/maxbbraun/whisper-edge.git
-cd whisper-edge/jetson-inference
-cp ../Dockerfile.jetson-nano Dockerfile
-cp ../stream.py .
+git clone https://github.com/maxbbraun/whisper-edge.git
+cd whisper-edge
 
-docker/build.sh dustynv/jetson-inference:r32.7.1  # JetPack 4.6.1
+sudo docker build \
+  -f Dockerfile.jetson-nano \
+  -t whisper-inference \
+  .
 ```
 
 ### Run
 
-Launch inference remotely:
+Launch inference:
 
 ```bash
-ssh -t user@jetson-nano.local 'cd whisper-edge/jetson-inference && docker/run.sh --run "python stream.py"'
+ssh user@jetson-nano.local
+
+cd whisper-edge
+
+sudo docker run \
+  --runtime nvidia \
+  -it \
+  --rm  \
+  --network host \
+  --device /dev/snd \
+  whisper-inference \
+  python stream.py
 ```
 
 You should see console output similar to this:
