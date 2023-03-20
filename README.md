@@ -52,11 +52,7 @@ ssh user@jetson-nano.local
 
 git clone https://github.com/maxbbraun/whisper-edge.git
 cd whisper-edge
-
-sudo docker build \
-  -f Dockerfile.jetson-nano \
-  -t whisper-inference \
-  .
+bash build.sh
 ```
 
 ### Run
@@ -66,16 +62,7 @@ Launch inference:
 ```bash
 ssh user@jetson-nano.local
 
-cd whisper-edge
-
-sudo docker run \
-  --runtime nvidia \
-  -it \
-  --rm  \
-  --network host \
-  --device /dev/snd \
-  whisper-inference \
-  python stream.py
+bash whisper-edge/run.sh
 ```
 
 You should see console output similar to this:
