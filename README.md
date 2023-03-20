@@ -32,26 +32,16 @@ Workaround:
 
 ### Setup
 
-First, follow the [developer kit setup instructions](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit), connect the Wi-Fi adapter and the microphone to USB, and ideally [install a fan](https://noctua.at/en/nf-a4x10-flx/service). (Also plugging in an Ethernet cable might help to make the downloads faster.)
-
-The USB microphone should show up as an [ALSA](https://www.alsa-project.org) device. Configure it once:
+First, follow the [developer kit setup instructions](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit), connect the Wi-Fi adapter and the microphone to USB, and ideally [install a fan](https://noctua.at/en/nf-a4x10-flx/service). (Also plugging in an Ethernet cable helps to make the downloads faster.) Then, get a shell on the Jetson Nano:
 
 ```bash
 ssh user@jetson-nano.local
-
-apt-get -y install alsa-utils
-arecord -l  # Identify recording device
-alsamixer  # Adjust gain
-arecord --format=S16_LE --duration=5 --rate=16000 --channels=1 --device=plughw:2,0 test.wav
 ```
 
 We will use [NVIDIA Docker containers](https://hub.docker.com/r/dustynv/jetson-inference/tags) to run inference. Get the source code and build the custom container:
 
 ```bash
-ssh user@jetson-nano.local
-
-git clone https://github.com/maxbbraun/whisper-edge.git
-cd whisper-edge
+git clone https://github.com/maxbbraun/whisper-edge.git && cd whisper-edge
 bash build.sh
 ```
 
@@ -60,8 +50,6 @@ bash build.sh
 Launch inference:
 
 ```bash
-ssh user@jetson-nano.local
-
 bash whisper-edge/run.sh
 ```
 
@@ -76,6 +64,59 @@ I0317 00:44:19.775566 547488051216 stream.py:51]
 I0317 00:44:22.046195 547488051216 stream.py:51] Open AI's mission is to ensure that artificial general intelligence
 I0317 00:44:31.353919 547488051216 stream.py:51] benefits all of humanity.
 I0317 00:44:49.219501 547488051216 stream.py:51]
+```
+
+The [`stream.py` script](stream.py) run in the container accepts flags for different configurations:
+
+```bash
+bash whisper-edge/run.sh --help
+
+       USAGE: stream.py [flags]
+flags:
+
+stream.py:
+  --channel_index: The index of the channel to use for transcription.
+    (default: '0')
+    (an integer)
+  --chunk_seconds: The length in seconds of each recorded chunk of audio.
+    (default: '10')
+    (an integer)
+  --input_device: The input device used to record audio.
+    (default: 'plughw:2,0')
+  --language: The language to use or empty to auto-detect.
+    (default: 'en')
+  --latency: The latency of the recording stream.
+    (default: 'low')
+  --model_name: The version of the OpenAI Whisper model to use.
+    (default: 'base.en')
+  --num_channels: The number of channels of the recorded audio.
+    (default: '1')
+    (an integer)
+  --sample_rate: The sample rate of the recorded audio.
+    (default: '16000')
+    (an integer)
+
+Try --helpfull to get a list of all flags.
+```
+
+### Troubleshooting
+
+To see if the microphone is working properly, use [`alsa-utils`](https://github.com/alsa-project/alsa-utils):
+
+```bash
+sudo apt-get -y install alsa-utils
+
+# Is the USB device connected?
+lsusb
+
+# Is the correct recording device selected?
+arecord -l
+
+# Is the gain set properly?
+alsamixer
+
+# Does a test recording work?
+arecord --format=S16_LE --duration=5 --rate=16000 --channels=1 --device=plughw:2,0 test.wav
 ```
 
 ## Coral Edge TPU
