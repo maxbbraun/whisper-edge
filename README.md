@@ -4,6 +4,8 @@ Porting [OpenAI Whisper](https://github.com/openai/whisper) speech recognition t
 
 ## Jetson Nano
 
+![Jetson Nano](media/jetson-nano.jpg)
+
 ### Shopping cart
 
 | Part | Price (2023) |
@@ -120,5 +122,7 @@ arecord --format=S16_LE --duration=5 --rate=16000 --channels=1 --device=plughw:2
 ```
 
 ## Coral Edge TPU
+
+![Coral](media/coral.jpg)
 
 See the corresponding [issue](https://github.com/maxbbraun/whisper-edge/issues/1) about what supporting the [Google Coral Edge TPU](https://coral.ai/products/) may look like.
