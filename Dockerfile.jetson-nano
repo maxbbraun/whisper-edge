@@ -8,29 +8,39 @@ WORKDIR /jetson-inference
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 42D5A192B819C5DA
 RUN apt-get update
 
+# Install the Rust toolchain.
 RUN apt-get -y install curl
-
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ENV PATH="/root/.cargo/bin:$PATH"
 
+# Configure Python.
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 2
 RUN python -m pip install --upgrade pip
 
+# Install build tools.
 RUN python -m pip install setuptools setuptools_rust
 
+# Install the patched version of tiktoken and its dependencies.
 RUN git clone https://github.com/maxbbraun/tiktoken.git && cd tiktoken && python -m pip install -e .
 RUN python -m pip install regex requests cached-property
 
+# Configure LLVM.
 RUN apt-get -y install clang-10 llvm-10
 ENV LLVM_CONFIG=/usr/bin/llvm-config-10
 RUN apt-get -y remove libtbb-dev
 
+# Install the patched version of whisper.
 RUN git clone https://github.com/maxbbraun/whisper.git && cd whisper && python -m pip install -e .
 
+# Configure the microphone.
 RUN apt-get -y install libportaudio2
 RUN python -m pip install sounddevice
 ENV PA_ALSA_PLUGHW=1
 
-RUN python -m pip install absl-py
+# Pre-cache some of the models.
+ENV CACHED_MODELS="base base.en tiny tiny.en"
+RUN for model in $CACHED_MODELS; do python -c "import whisper; whisper.load_model('$model')"; done
 
+# Add the streaming script and its dependencies.
+RUN python -m pip install absl-py
 COPY stream.py .

@@ -43,8 +43,8 @@ ssh user@jetson-nano.local
 We will use [NVIDIA Docker containers](https://hub.docker.com/r/dustynv/jetson-inference/tags) to run inference. Get the source code and build the custom container:
 
 ```bash
-git clone https://github.com/maxbbraun/whisper-edge.git && cd whisper-edge
-bash build.sh
+git clone https://github.com/maxbbraun/whisper-edge.git
+bash whisper-edge/build.sh
 ```
 
 ### Run
